@@ -6,10 +6,12 @@ const scene = new THREE.Scene()
 
 //camera fields
 const fov = 75
-const aspect = window.innerWidth/window.innerHeight
+const aspect = 1 //window.innerWidth/window.innerHeight
 const near = 0.1
 const far = 100
-const canvasSize = 300
+const canvasSize = 330
+const canvasWidthSize = window.innerWidth/4 //potentiall useful for windowresizing
+const canvasHeightSize = window.innerHeight/4
 
 //setup multiple cameras - CHANGE WITH constants!
 const camera1 = new THREE.PerspectiveCamera(fov,1,near,far)

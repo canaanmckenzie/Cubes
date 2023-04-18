@@ -1,8 +1,11 @@
 import * as THREE from 'three'
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
+import Stats from 'three/examples/jsm/libs/stats.module' //with allowsyntheticdefaults only used with default import
+import {GUI} from 'dat.gui'
 
-//scene
+//create scene
 const scene = new THREE.Scene()
+scene.add(new THREE.AxesHelper(5))
 
 //camera fields
 const fov = 75
@@ -23,8 +26,9 @@ const renderer = new THREE.WebGLRenderer()
 renderer.setSize(window.innerWidth,window.innerHeight)
 document.body.appendChild(renderer.domElement)
 
-//external controls with mouse
-new OrbitControls(camera,renderer.domElement)
+//controls 
+const controls = new OrbitControls(camera,renderer.domElement)
+//controls.addEventListener('change',render) //line unnecessary if re rendering in animation loop
 
 //defined geometry
 const geometry = new THREE.BoxGeometry()
@@ -44,14 +48,37 @@ function onWindowResize(){
     render()
 }
 
+//add stats to animation
+const stats = new Stats()
+document.body.appendChild(stats.dom)
+
+//gui
+const gui = new GUI()
+const cubeFolder = gui.addFolder('Cube')
+const cubeRotationFolder = cubeFolder.addFolder('Rotation')
+cubeRotationFolder.add(cube.rotation,'x',0,Math.PI * 2)
+cubeRotationFolder.add(cube.rotation,'y',0,Math.PI * 2)
+cubeRotationFolder.add(cube.rotation,'z',0,Math.PI * 2)
+const cubePositionFolder = cubeFolder.addFolder('Position')
+cubePositionFolder.add(cube.position,'x',-10,10,2)
+cubePositionFolder.add(cube.position,'y',-10,10,2)
+cubePositionFolder.add(cube.position,'z',-10,10,2)
+const cubeScaleFolder = cubeFolder.addFolder('Scale')
+cubeScaleFolder.add(cube.scale,'x',-5,5)
+cubeScaleFolder.add(cube.scale,'z',-5,5)
+cubeScaleFolder.add(cube.scale,'y',-5,5)
+
 function animate(){
     requestAnimationFrame(animate)
-    cube.rotation.x +=0.01
-    cube.rotation.y +=0.01
+    //cube.rotation.x +=0.01
+    //cube.rotation.y +=0.01
     render()
+    stats.update()
 }
 
 function render(){
     renderer.render(scene,camera)
 }
+
 animate()
+
